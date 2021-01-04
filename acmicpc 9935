@@ -1,0 +1,20 @@
+text=input()
+explode=input()
+
+bomb_length=len(explode)
+text_length=len(text)
+stack=[]
+
+for i in range(text_length):
+    stack.append(text[i])
+    if explode[-1]==stack[-1] and bomb_length<=len(stack):
+        bomb=''.join(stack[len(stack)-bomb_length:len(stack)])
+        if bomb==explode:
+            for i in range(bomb_length):
+                stack.pop()
+
+res=''.join(stack)
+if stack:
+    print(res)
+else:
+    print('FRULA')
