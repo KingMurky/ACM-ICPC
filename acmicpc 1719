@@ -1,0 +1,55 @@
+import heapq
+import sys
+INF=sys.maxsize
+
+
+def dijkstra(start):
+    global res
+    queue=[]
+    dist=[INF]*(n+1)
+    dist[start]=0
+    heapq.heappush(queue,[0,start])
+
+    while queue:
+        current_wei,current_node=heapq.heappop(queue)
+
+        if dist[current_node]<current_wei:
+            continue
+
+        for weight,node in graph[current_node]:
+            new_weight=current_wei+weight
+            if new_weight<dist[node]:
+                dist[node]=new_weight
+                heapq.heappush(queue,[new_weight,node])
+                res[node]=current_node
+
+    for i in range(1,n+1):
+        if i==start:
+            print('-', end=' ')
+        elif res[i]==start:
+            print(i, end=' ')
+        else:
+            idx=i
+            while True:
+                if res[idx]==start:
+                    print(idx, end=' ')
+                    break
+                else:
+                    idx=res[idx]
+
+
+
+
+
+n,m=map(int,sys.stdin.readline().split())
+graph=[[] for _ in range(n+1)]
+res = [0]*(n+1)
+
+for i in range(m):
+    a,b,s=map(int,sys.stdin.readline().split())
+    graph[a].append([s,b])
+    graph[b].append([s,a])
+
+for i in range(1,n+1):
+    dijkstra(i)
+    print()
