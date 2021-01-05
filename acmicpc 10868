@@ -1,0 +1,37 @@
+from math import *
+import sys
+INF=1000000001
+
+def init(left,right,node):
+    if left==right:
+        tree[node]=nums[left]
+        return tree[node]
+    mid=(left+right)//2
+
+    tree[node]=min(init(left,mid,node*2),init(mid+1,right,node*2+1))
+    return tree[node]
+
+def query(left,right,node,start,end):
+    if right<start or end<left:
+        return INF
+    if left<=start and end<=right:
+        return tree[node]
+    mid=(start+end)//2
+    return min(query(left,right,node*2,start,mid),query(left,right,node*2+1,mid+1,end))
+
+
+
+n,m=map(int,sys.stdin.readline().split())
+h=int(ceil(log2(n)))
+tree_size=(1<<(h+1))
+tree=[0]*tree_size
+nums=[0]
+
+for i in range(n):
+    nums.append(int(sys.stdin.readline()))
+
+init(1,n,1)
+
+for i in range(m):
+    a,b=map(int,sys.stdin.readline().split())
+    print(query(a,b,1,1,n))
