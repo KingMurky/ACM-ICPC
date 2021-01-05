@@ -1,0 +1,23 @@
+import heapq
+import sys
+
+n=int(input())
+queue=[]
+
+for i in range(n):
+    num=int(input())
+    heapq.heappush(queue,num)
+
+if n==1:
+    print(0)
+    sys.exit()
+
+ans=0
+while len(queue)>1:
+    card1=heapq.heappop(queue)
+    card2=heapq.heappop(queue)
+    temp=card1+card2
+    ans+=temp
+    heapq.heappush(queue,temp)
+
+print(ans)
