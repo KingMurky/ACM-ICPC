@@ -1,0 +1,39 @@
+import heapq
+import sys
+INF=sys.maxsize
+
+def dijkstra(start):
+    global d
+    queue=[]
+    dist=[INF]*30001
+    heapq.heappush(queue,[0,start])
+    dist[start]=0
+
+    while queue:
+        cur_wei,cur_node=heapq.heappop(queue)
+
+        if dist[cur_node]<cur_wei:
+            continue
+
+        for wei,node in graph[cur_node]:
+            new_wei=cur_wei+wei
+            if new_wei<dist[node]:
+                dist[node]=new_wei
+                heapq.heappush(queue,[new_wei,node])
+
+        # 만약 지름길이 없으면 1만큼 이동하는 것.
+        if cur_wei+1<=d and cur_wei+1<dist[cur_node+1]:
+            dist[cur_node+1]=cur_wei+1
+            heapq.heappush(queue,[cur_wei+1,cur_node+1])
+
+    return dist[d]
+
+n,d=map(int,sys.stdin.readline().split())
+graph=[[] for _ in range(30001)]
+
+for i in range(n):
+    a,b,s=map(int,sys.stdin.readline().split())
+    graph[a].append([s,b])
+
+
+print(dijkstra(0))
