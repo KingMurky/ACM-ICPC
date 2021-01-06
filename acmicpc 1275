@@ -1,0 +1,49 @@
+import sys
+from math import *
+
+def init(left,right,node):
+    if left==right:
+        tree[node]=nums[left]
+        return tree[node]
+
+    mid=(left+right)//2
+    tree[node]=init(left,mid,node*2)+init(mid+1,right,node*2+1)
+    return tree[node]
+
+def query(left,right,start,end,node):
+    if end<left or right<start:
+        return 0
+    if left<=start and end<=right:
+        return tree[node]
+
+    mid=(start+end)//2
+    return query(left,right,start,mid,node*2)+query(left,right,mid+1,end,node*2+1)
+
+def change(start,end,node,idx,diff):
+    if idx<start or end<idx:
+        return
+
+    tree[node]=tree[node]+diff
+    if start!=end:
+        mid = (start + end) // 2
+        change(start,mid,node*2,idx,diff)
+        change(mid+1,end,node*2+1,idx,diff)
+
+n,q=map(int,input().split())
+nums=[0]+list(map(int,sys.stdin.readline().split()))
+h=int(ceil(log2(n)))
+tree_size=1<<(h+1)
+tree=[0]*tree_size
+
+init(1,n,1)
+
+for i in range(q):
+    x,y,a,b=map(int,sys.stdin.readline().split())
+    if x<=y:
+        print(query(x,y,1,n,1))
+    else:
+        print(query(y,x,1,n,1))
+    diff=b-nums[a]
+    # 차이만 구하는 게 아니라 실제 숫자 배열도 바꿔줘야 해
+    nums[a]=b
+    change(1,n,1,a,diff)
