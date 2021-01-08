@@ -1,0 +1,50 @@
+import sys
+from math import *
+
+def init(left,right,node):
+    if left==right:
+        tree[node]=nums[left]
+        return tree[node]
+
+    mid = (left+right)//2
+    tree[node] = min(init(left,mid,node*2),init(mid+1,right,node*2+1))
+    return tree[node]
+
+def query(start,end,left,right,node):
+    if end<left or right<start:
+        return 1000000001
+    if left<=start and end<=right:
+        return tree[node]
+    mid = (start+end) // 2
+    return min(query(start,mid,left,right,node*2),query(mid+1,end,left,right,node*2+1))
+
+def update(start,end,idx,node):
+    if idx<start or end<idx:
+        return tree[node]
+    if start == end:
+        tree[node] = nums[idx]
+        return tree[node]
+
+    mid = (start+end) // 2
+    tree[node] = min(update(start,mid,idx,node*2),update(mid+1,end,idx,node*2+1))
+
+    return tree[node]
+
+
+
+n=int(input())
+nums=list(map(int,sys.stdin.readline().split()))
+h=int(ceil(log2(n)))
+tree_size=1<<(h+1)
+tree=[0]*tree_size
+
+m=int(input())
+init(0,n-1,1)
+
+for i in range(m):
+    a,b,c=map(int,sys.stdin.readline().split())
+    if a==1:
+        nums[b-1]=c
+        update(0,n-1,b-1,1)
+    elif a==2:
+        print(query(0,n-1,b-1,c-1,1))
