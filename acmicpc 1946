@@ -1,0 +1,24 @@
+t=int(input())
+
+for i in range(t):
+    n=int(input())
+    rank=[]
+    for j in range(n):
+        a,b=map(int,input().split())
+        rank.append([a,b])
+
+    if n==1:
+        print(1)
+        continue
+
+    rank.sort(key=lambda x: x[0])
+
+    cnt=1
+    min_val=rank[0][1]
+
+    for j in range(1,n):
+        if rank[j][1]<min_val:
+            min_val=rank[j][1]
+            cnt+=1
+
+    print(cnt)
