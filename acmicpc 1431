@@ -1,0 +1,17 @@
+n=int(input())
+
+def compare(x):
+    temp=0
+    for i in range(len(x)):
+        if '0'<=x[i]<='9':
+            temp+=int(x[i])
+    return temp
+guitar=[]
+
+for _ in range(n):
+    guitar.append(input())
+
+guitar.sort(key=lambda x:(len(x),compare(x),x))
+
+for g in guitar:
+    print(g)
