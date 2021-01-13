@@ -1,0 +1,33 @@
+def binarySearch(left,right,goal):
+    while True:
+        if right<left:
+            return False
+
+        mid=(left+right)//2
+        if s[mid]<goal:
+            left=mid+1
+        elif goal<s[mid]:
+            right=mid-1
+        elif s[mid]==goal:
+            return True
+
+n,m=map(int,input().split())
+s=[]
+chk=[]
+
+for i in range(n):
+    s.append(input())
+
+s.sort()
+cnt=0
+for i in range(m):
+    name=input()
+
+    if binarySearch(0,n-1,name):
+        cnt+=1
+
+print(cnt)
+
+# 전형적인 이진탐색트리 문제
+# 집합 리스트를 입력 받고 정렬 한 후
+# 이름을 하나씩 입력받고 이진탐색트리로 존재 여부를 파악 하기만 하면 끝
