@@ -1,0 +1,33 @@
+import heapq
+
+n=int(input())
+time=[]
+
+for _ in range(n):
+    s,t=map(int,input().split())
+    time.append([s,t])
+
+time.sort(key=lambda x: x[0])
+pq=[]
+heapq.heappush(pq,time[0][1])
+cnt=1
+
+for i in range(1,n):
+    if pq[0]<=time[i][0]:
+        heapq.heappop(pq)
+        heapq.heappush(pq,time[i][1])
+    else:
+        heapq.heappush(pq,time[i][1])
+
+print(len(pq))
+
+# 그리디와 우선순위 큐를 동시에 사용하는 문제
+# 우선 비슷한 백준 문제였던, 회의실 배정과 헷갈리면 안된다.
+# 이 문제 같은 경우, 최소의 강의실을 사용해야한다.
+# 이를 위해서는 최대한 빨리 끝나는 강의 순서대로 정렬을 하고 우선순위 큐에 push 해야한다.
+# 이후 그 강의의 끝나는 시간보다 시작시간이 같거나 큰 강의가 존재한다면,
+# 기존의 강의를 pop 하고 그 강의를 우선순위 큐에 push 하고
+# 만약 처음 강의의 종료시각보다 시작시간이 이른 강의가 존재 할 경우에는
+# pop을 하지 않고 그 강의에 대해 push 만을 수행한다.
+# 모든 강의에 대해 이 과정을 반복한다면, 최종적으로 큐에 남는 강의의 갯수가
+# 필요한 모든 강의실의 수이다.
