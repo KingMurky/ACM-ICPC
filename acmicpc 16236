@@ -1,0 +1,77 @@
+from collections import deque
+import sys
+dx=[1,-1,0,0]
+dy=[0,0,-1,1]
+
+def dist_fish(sy,sx,fy,fx,size):
+    global graph
+    dist=[[-1]*n for _ in range(n)]
+    q=deque()
+    dist[sy][sx]=0
+    q.append([sy,sx])
+    while q:
+        sy,sx=q.popleft()
+
+        if sy==fy and sx==fx:
+            return dist[fy][fx]
+
+        for i in range(4):
+            ny=sy+dy[i]
+            nx=sx+dx[i]
+            if 0<=ny<n and 0<=nx<n and dist[ny][nx]==-1 and graph[ny][nx]<=size:
+                dist[ny][nx]=dist[sy][sx]+1
+                q.append([ny,nx])
+
+
+def check_fish(sy,sx,size):
+    global graph
+    fish_arr=[]
+    for i in range(n):
+        for j in range(n):
+            if graph[i][j]<size and graph[i][j]!=0:
+                d=dist_fish(sy,sx,i,j,size)
+                fish_arr.append([d,i,j])
+
+    if fish_arr:
+        return fish_arr
+    else:
+        return False
+
+def solve(sy,sx,size):
+    global graph
+
+    ans=0
+    cnt=0
+    while True:
+
+        fish_arr=check_fish(sy,sx,size)
+        if fish_arr==False:
+            # 엄마 상어에게 도움을 요청할 때
+            return ans
+
+        fish_arr.sort(key=lambda x: (x[0],x[1],x[2]))
+        dist,fy,fx=fish_arr.pop(0)
+        graph[fy][fx]=0
+        ans+=dist
+
+        cnt+=1
+        if cnt==size:
+            size+=1
+            cnt=0
+        sy,sx=fy,fx
+
+n=int(input())
+
+graph=[]
+
+for i in range(n):
+    row=list(map(int,input().split()))
+    graph.append(row)
+
+for i in range(n):
+    for j in range(n):
+        if graph[i][j]==9:
+            sy,sx=i,j
+            graph[i][j]=0
+            print(solve(sy,sx,2))
+            sys.exit()
