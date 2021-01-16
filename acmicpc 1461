@@ -1,0 +1,28 @@
+n,m=map(int,input().split())
+nums=[0]+list(map(int,input().split()))
+
+nums.sort()
+
+pivot=0
+ans=0
+for i in range(len(nums)):
+    if nums[i]==0:
+        pivot=i
+
+for i in range(0,pivot,m):
+    ans+=(abs(nums[i])*2)
+
+for i in range(n,pivot,-m):
+    ans+=(abs(nums[i])*2)
+
+ans-=max(abs(nums[0]),abs(nums[n]))
+
+print(ans)
+
+# 그리디와 정렬 이용하여 푸는 문제
+# 마지막으로 책을 두고 0으로 돌아오지 않아도 된다.
+# 따라서 마지막으로 두는 책은 가장 먼 책이 되어야 해
+# 그러기 위해서는 일단 정렬을 하고 0을 기준으로 음수 부분 양수 부분으로 나눈 후
+# 두 부분에서 m 만큼 건너뛰면서 두배를 곱한 값을 정답 값에 저장한다.
+# 마지막으로 음수 부분 양수 부분 모두를 통틀어 가장 큰 값을 빼줘야 함
+# 왜? 마지막으로 책을 두고 0으로 돌아오지 않아도 되니까
